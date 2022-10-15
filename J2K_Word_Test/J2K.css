@@ -1,0 +1,87 @@
+#testPaper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#navPanel{
+    display: flex;
+    justify-items: center;
+}
+
+.navButton{
+    text-align: center;
+    width: 250px;
+    height: 100px;
+    margin: 80px 30px;
+    border-radius: 20px;
+    color:#ffffff;
+
+    font-size: 50px;
+    line-height: 100px;
+}
+
+.card{
+    display: grid;
+    grid-template-columns: 1fr 1fr 80px;
+    grid-template-rows: 1fr 1fr ;
+    gap: 10px 10px;
+
+    text-align: center;
+    background: #5A9367;
+    width: 870px;
+    height: 200px;
+    border-radius: 48px;
+    margin: 40px 50px;
+}
+
+.Question{
+    font-size: 5vw;
+    letter-spacing: -0.5vw;
+    line-height: 90px;
+    width: 362px;
+    height: 90px;
+    margin: 12px 12px;
+    border-radius: 36px;
+    background: #FFFFFF;
+
+    grid-column: 1/2;
+    grid-row: 1/2;
+}
+.writeAns{
+    font-size: 3.5vw;
+    padding-left: 30px;
+    letter-spacing: -0.1vw;
+    line-height: 90px;
+    text-align: left;
+    width: 350px;
+    height: 90px;
+    margin: 12px 10px;
+    border-radius: 36px;
+    border: 1px solid #545353;
+    background: #cbcbcb;
+
+    grid-column: 2/3;
+    grid-row: 1/2;
+}
+.hint{
+    font-size: 23px;
+    text-align: left;
+    padding-left: 50px;
+    grid-column: 1/2;
+    grid-row: 2/3;
+    color:#d9b31c
+}
+.hint_Summary{
+    font-size: 17px;
+    color:#FFFFFF;
+}
+.Answer{
+    font-size: 40px;
+    letter-spacing: -5px;
+    color: #3bbfe7;
+    text-align: left;
+    padding-left: 30px;
+    grid-column: 2/4;
+    grid-row: 2/3;
+}

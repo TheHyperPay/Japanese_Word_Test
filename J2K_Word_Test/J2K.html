@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link href="../bodyset.css" rel="stylesheet">
+        <link href="J2K.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+        <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+        <title>일 -> 한 단어 공부</title>
+        <py-env>
+            - pandas
+            - path:
+                - ../getData.py
+          </py-env>
+        <py-script src="../getData.py"></py-script>
+    </head>
+    <body>
+        <div id="testPaper">
+            <div id="navPanel">
+                <div class="navButton" style="background: #a10505">
+                    <a href="../index.html"><strong>나가기</strong></a>
+                </div>
+                <div class="navButton" style="background: #894803">
+                    <strong>재시작</strong>
+                </div>
+                <div class="navButton" style="background: #087921">
+                    <strong>정답 확인</strong>
+                </div>
+            </div>
+            <div class="card">
+                <div class="Question">同意美しい共同体</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    힌트가 뭘까요?? 커비??
+                </details>
+                <div class="Answer">~(い형용사+だ)라 합니다</div>
+            </div>
+        </div>
+    </body>
+</html>

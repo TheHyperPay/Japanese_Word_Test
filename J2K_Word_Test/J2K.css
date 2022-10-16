@@ -36,7 +36,7 @@
 }
 
 .Question{
-    font-size: 5vw;
+    font-size: 50px;
     letter-spacing: -0.5vw;
     line-height: 90px;
     width: 362px;
@@ -75,6 +75,11 @@
 .hint_Summary{
     font-size: 17px;
     color:#FFFFFF;
+}
+.hint_info{
+    font-size: 23px;
+    margin: 5px 0px;
+    color:#d9b31c
 }
 .Answer{
     font-size: 40px;

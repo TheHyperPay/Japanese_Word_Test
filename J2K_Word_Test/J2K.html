@@ -4,37 +4,173 @@
         <meta charset="UTF-8">
         <link href="../bodyset.css" rel="stylesheet">
         <link href="J2K.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
-        <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+        <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+        <script defer src="https://pyscript.net/latest/pyscript.js"></script>
         <title>일 -> 한 단어 공부</title>
+        <script>
+function show_Answer(){
+    var ANS=document.getElementsByClassName('Answer')
+    for(var x=0; x<12; x++){
+        ANS[x].style["color"]="#3bbfe7";
+    }
+}
+        </script>
         <py-env>
             - pandas
-            - path:
-                - ../getData.py
+            - numpy
           </py-env>
-        <py-script src="../getData.py"></py-script>
+        <py-script>
+import pandas as pd
+import numpy as np
+from pyodide.http import open_url  
+from js import document
+
+Question_Amount=12
+
+csv = pd.read_csv(open_url("https://raw.githubusercontent.com/TheHyperPay/Japanese_Word_Test/Azure/DB/Jap_Words.csv"))
+
+Question=csv['단어']
+Answer=csv['뜻']
+Hint=csv['히라가나']
+
+WordLength=int(len(Question))
+
+def Shuffle_Question():
+    a = np.random.choice(range(0, WordLength), Question_Amount, replace=False)
+
+    Quest_elem=document.getElementsByClassName('Question')
+    Answer_elem=document.getElementsByClassName('Answer')
+    Hint_elem=document.getElementsByClassName('hint_info')
+
+    for x in range(0, Question_Amount):
+        Quest_elem[x].innerHTML=Question[a[x]]
+        Answer_elem[x].innerHTML=Answer[a[x]]
+        Hint_elem[x].innerHTML=Hint[a[x]]
+
+Shuffle_Question()
+
+        </py-script>
     </head>
     <body>
         <div id="testPaper">
             <div id="navPanel">
                 <div class="navButton" style="background: #a10505">
-                    <a href="../index.html"><strong>나가기</strong></a>
+                    <a href="../index.html" style="color: #ffffff"><strong>나가기</strong></a>
                 </div>
-                <div class="navButton" style="background: #894803">
+                <button class="navButton" onClick="window.location.reload()" style="background: #894803">
                     <strong>재시작</strong>
-                </div>
-                <div class="navButton" style="background: #087921">
+                </button>
+                <button class="navButton" onClick="show_Answer()" style="background: #087921">
                     <strong>정답 확인</strong>
-                </div>
+                </button>
             </div>
             <div class="card">
-                <div class="Question">同意美しい共同体</div>
+                <div class="Question">ぞとまてください</div>
                 <input type="text" class="writeAns">
                 <details class="hint">
                     <summary class="hint_Summary"><strong>Hint!</strong></summary>
-                    힌트가 뭘까요?? 커비??
+                    <p class="hint_info">here is to display hiragana hint</p>
                 </details>
-                <div class="Answer">~(い형용사+だ)라 합니다</div>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
+            </div>
+            <div class="card">
+                <div class="Question">ぞとまてください</div>
+                <input type="text" class="writeAns">
+                <details class="hint">
+                    <summary class="hint_Summary"><strong>Hint!</strong></summary>
+                    <p class="hint_info">here is to display hiragana hint</p>
+                </details>
+                <div class="Answer" style="color: #5A9367">정답을 표기하는 곳 입니다</div>
             </div>
         </div>
     </body>

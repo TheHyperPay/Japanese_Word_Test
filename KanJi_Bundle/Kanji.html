@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link href="../bodyset.css" rel="stylesheet">
+        <link href="Kanji.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+        <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+        <title>상용한자 공부</title>
+        <script>
+var canWatchKor=true;
+var canWatchJap=true;
+
+function onoff_Kor_Mean(){
+    if(!canWatchKor){
+        document.getElementById('KorMean').style["color"]='#000000';
+        canWatchKor=true;
+    }
+    else{
+        document.getElementById('KorMean').style["color"]='#ffffff';
+        canWatchKor=false;
+    }
+}
+
+function onoff_Jap_Mean(){
+    if(!canWatchJap){
+        document.getElementById('JapMean').style["color"]='#000000';
+        document.getElementById('JapSound').style["color"]='#000000';
+        canWatchJap=true;
+    }
+    else{
+        document.getElementById('JapMean').style["color"]='#ffffff';
+        document.getElementById('JapSound').style["color"]='#ffffff';
+        canWatchJap=false;
+    }
+}
+
+        </script>
+        <py-env>
+            - pandas
+            - numpy
+          </py-env>
+        <py-script>
+import pandas as pd
+import numpy as np
+from pyodide.http import open_url  
+from js import document
+from pyodide.ffi import create_proxy
+
+csv = pd.read_csv(open_url("https://raw.githubusercontent.com/TheHyperPay/Japanese_Word_Test/Azure/DB/Jap_Kanji.csv"))
+
+Kanji=csv['한자']
+Kor_mean=csv['뜻']
+Jap_mean=csv['음']
+Jap_sound=csv['훈']
+
+TextNum=0
+
+KanjiLength=int(len(Kanji))
+
+
+a = np.random.choice(range(0, KanjiLength), KanjiLength, replace=False)
+
+Kanji_elem=document.getElementById('Kanji')
+Kor_mean_elem=document.getElementById('KorMean')
+Jap_Mean_elem=document.getElementById('JapMean')
+Jap_sound_elem=document.getElementById('JapSound')
+
+def exchangeValue(num):
+    Kanji_elem.innerHTML=Kanji[a[num]]
+    Kor_mean_elem.innerHTML=Kor_mean[a[num]]
+    Jap_Mean_elem.innerHTML=Jap_mean[a[num]]
+    Jap_sound_elem.innerHTML=Jap_sound[a[num]]
+
+def nextKanji(event):
+    global TextNum
+    if TextNum==KanjiLength:
+        return
+    else:
+        TextNum=TextNum+1
+        exchangeValue(TextNum)
+
+def backKanji(event):
+    global TextNum
+    if TextNum==0:
+        return
+    else:
+        TextNum=TextNum-1
+        exchangeValue(TextNum)
+
+exchangeValue(0)
+
+function_proxy_next = create_proxy(nextKanji)
+function_proxy_back = create_proxy(backKanji)
+
+document.getElementById("Forward").addEventListener("click", function_proxy_next)
+document.getElementById("Backward").addEventListener("click", function_proxy_back)
+
+
+        </py-script>
+    </head>
+    <body>
+        <div id="testPaper">
+            <div id="navPanel">
+                <div class="navButton" style="background: #a10505">
+                    <a href="../index.html" style="color: #ffffff"><strong>나가기</strong></a>
+                </div>
+                <button class="navButton" onClick="onoff_Kor_Mean()" style="background: #894803">
+                    <strong>한글 훈음</strong>
+                </button>
+                <button class="navButton" onClick="onoff_Jap_Mean()" style="background: #087921">
+                    <strong>일본 훈음</strong>
+                </button>
+            </div>
+
+            <div id="Section">
+                <button id="Backward">
+                    <strong>ᐊ</strong>
+                </button>
+                <div id="Card">
+                    <div id="Kanji">待</div>
+                    <strong id="KorMean">기다릴 대</strong>
+                    <div id="JapMean">まつ</div>
+                    <strong id="JapSound">たい</strong>
+                </div>
+                <button id="Forward">
+                    <strong>ᐅ</strong>
+                </button>
+            </div>
+        </div>
+    </body>
+</html>

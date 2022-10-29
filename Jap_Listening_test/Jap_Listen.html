@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!---ㅋㅋㅋㅋㅋ 로컬호스트에서 ssl인증 안되어서 gtts를 못쓰다니...-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link href="../bodyset.css" rel="stylesheet">
+        <link href="Jap_Listen.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+        <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+        <title>일본어 받아쓰기</title>
+        <script>
+
+        </script>
+        <py-env>
+            - pandas
+            - numpy
+            - gTTS
+            - playsound==1.2.2
+
+          </py-env>
+        <py-script>
+import pandas as pd
+import numpy as np
+from gtts import gTTS
+from pyodide.http import open_url  
+from js import document
+from pyodide.ffi import create_proxy
+import os
+
+def playing():
+    try:
+        playsound('speakText.mp3')
+        os.remove('speakText.mp3')
+    except:
+        print('Playsound Error!')
+    return
+
+def makeMp3UsingGTTS(text, LANG, ISslow):
+    tts = gTTS(text, lang=LANG, slow=ISslow)
+    tts.save('speakText.mp3')
+
+def readText(event):
+    makeMp3UsingGTTS('need a module that will play from a file-like/file object.', 'en', False)
+    playing()
+
+function_proxy = create_proxy(readText)
+
+document.getElementById("play_sound").addEventListener("click", function_proxy)
+
+        </py-script>
+    </head>
+    <body>
+        <div id="testPaper">
+            <div id="navPanel">
+                <div class="navButton" style="background: #a10505">
+                    <a href="../index.html" style="color: #ffffff"><strong>나가기</strong></a>
+                </div>
+                <button class="navButton" style="background: #894803">
+                    <strong>다른문제</strong>
+                </button>
+                <button class="navButton" style="background: #087921">
+                    <strong>정답</strong>
+                </button>
+            </div>
+        </div>
+        <div>
+            <button id="play_sound">라이브러리 테스트</button>
+        </div>
+    </body>
+</html>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!---ㅋㅋㅋㅋㅋ 로컬호스트에서 ssl인증 안되어서 gtts를 못쓰다니...-->
 <html>
     <head>
         <meta charset="UTF-8">
@@ -136,7 +137,6 @@ document.getElementById("Restart").addEventListener("click", function_proxy_re)
             <div id="right_answer"></div>
             <div id="submit">제출</div> 
         </div>
-        <div style="color: white">V a1.4.0 pp</div>
     </body>
     <script>
 function speechJapaneseSentence(text, option_prop){
@@ -146,9 +146,10 @@ function speechJapaneseSentence(text, option_prop){
     const prop=option_prop || {};
 
     const speechMessage=new SpeechSynthesisUtterance();
+    speechMessage.voice = speechSynthesis.getVoices().filter(function (voice) { return voice.name === "Google 日本語"; })[0];
     speechMessage.rate=prop.rate || 1; //0.1~10
     speechMessage.pitch=prop.pitch || 1; //0~2
-    speechMessage.lang=prop.lang || 'ja-JP';
+    speechMessage.lang=prop.lang || 'en-US';
     speechMessage.text=text;
 
     window.speechSynthesis.speak(speechMessage);

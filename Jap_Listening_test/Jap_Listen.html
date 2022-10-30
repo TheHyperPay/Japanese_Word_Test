@@ -148,7 +148,7 @@ function speechJapaneseSentence(text, option_prop){
     const speechMessage=new SpeechSynthesisUtterance();
     speechMessage.rate=prop.rate || 1; //0.1~10
     speechMessage.pitch=prop.pitch || 1; //0~2
-    speechMessage.lang=prop.lang || 'en-US';
+    speechMessage.lang=prop.lang || 'ja-JP';
     speechMessage.text=text;
 
     window.speechSynthesis.speak(speechMessage);

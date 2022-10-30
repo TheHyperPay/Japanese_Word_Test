@@ -9,43 +9,92 @@
         <script defer src="https://pyscript.net/latest/pyscript.js"></script>
         <title>일본어 받아쓰기</title>
         <script>
+let now_sentence;
 
+function setSentence_Question(sentence){
+    console.log(sentence);
+    now_sentence=sentence;
+}
+function getSentence_Question(){
+    return now_sentence;
+}
         </script>
         <py-env>
             - pandas
             - numpy
-            - gTTS
-            - playsound==1.2.2
 
           </py-env>
         <py-script>
 import pandas as pd
 import numpy as np
-from gtts import gTTS
 from pyodide.http import open_url  
-from js import document
+from js import document, setSentence_Question
 from pyodide.ffi import create_proxy
-import os
 
-def playing():
-    try:
-        playsound('speakText.mp3')
-        os.remove('speakText.mp3')
-    except:
-        print('Playsound Error!')
-    return
+SentenceNum=0
+tsv = pd.read_csv(open_url("https://raw.githubusercontent.com/TheHyperPay/Japanese_Word_Test/Azure/DB/Lang_Sentence.tsv"), sep='\t')
 
-def makeMp3UsingGTTS(text, LANG, ISslow):
-    tts = gTTS(text, lang=LANG, slow=ISslow)
-    tts.save('speakText.mp3')
+Jap_Sentences=tsv['일본어']
+Jap_Sentences_Length=int(len(Jap_Sentences))
 
-def readText(event):
-    makeMp3UsingGTTS('need a module that will play from a file-like/file object.', 'en', False)
-    playing()
+a = np.random.choice(range(0, Jap_Sentences_Length), Jap_Sentences_Length, replace=False)
 
-function_proxy = create_proxy(readText)
+def exchangeSentence(num):
+    Question_Sentence=Jap_Sentences[a[num]]
+    setSentence_Question(Question_Sentence)
 
-document.getElementById("play_sound").addEventListener("click", function_proxy)
+def next_Sentence(event):
+    global SentenceNum
+    if SentenceNum==Jap_Sentences_Length:
+        return
+    else:
+        SentenceNum=SentenceNum+1
+        question_restart(event)
+        exchangeSentence(SentenceNum)
+
+def back_Sentence(event):
+    global SentenceNum
+    if SentenceNum==0:
+        return
+    else:
+        SentenceNum=SentenceNum-1
+        exchangeSentence(SentenceNum)
+
+def show_Answer(event):
+    write_Ans_List=list(document.getElementById("answer").value)
+    right_Ans_List=list(Jap_Sentences[a[SentenceNum]])
+    Text=''
+
+    for x in range(0, len(right_Ans_List)-1):
+        try:
+            Text=Text+change_TextColor(write_Ans_List[x], right_Ans_List[x])
+        except:
+            print('Over Array Error!')
+            Text=Text+change_TextColor('', right_Ans_List[x])
+    
+    document.getElementById("right_answer").innerHTML=Text
+
+def change_TextColor(write, answer):
+    #print(write+" "+answer)
+
+    if write!=answer:
+        return '<span style="color: red">'+answer+'</span>'
+    else:
+        return answer
+
+def question_restart(event):
+    document.getElementById("answer").value=''
+    document.getElementById("right_answer").innerHTML=''
+
+exchangeSentence(0)
+
+function_proxy_next = create_proxy(next_Sentence)
+function_proxy_ans = create_proxy(show_Answer)
+function_proxy_re = create_proxy(question_restart)
+
+document.getElementById("Next_Q").addEventListener("click", function_proxy_next)
+document.getElementById("submit").addEventListener("click", function_proxy_ans)
+document.getElementById("Restart").addEventListener("click", function_proxy_re)
 
         </py-script>
     </head>
@@ -55,16 +104,65 @@ document.getElementById("play_sound").addEventListener("click", function_proxy)
                 <div class="navButton" style="background: #a10505">
                     <a href="../index.html" style="color: #ffffff"><strong>나가기</strong></a>
                 </div>
-                <button class="navButton" style="background: #894803">
-                    <strong>다른문제</strong>
+                <button class="navButton" id="Restart" style="background: #894803">
+                    <strong>다시풀기</strong>
                 </button>
-                <button class="navButton" style="background: #087921">
-                    <strong>정답</strong>
+                <button class="navButton" id="Next_Q" style="background: #087921">
+                    <strong>다음문제</strong>
                 </button>
             </div>
+            <div id="SpeechValues">
+
+                <div class="setValues">
+                    <span><strong style="color: white">Slow</strong></span>
+                    <input type="range" id="speed" name="speed" min="30" max="170" value="100" style="width: 400px; margin: 0px 15px;">
+                    <span><strong style="color: white">Fast</strong></span>
+                </div>
+                <div class="setValues">
+                    <span><strong style="color: white"> Low </strong></span>
+                    <input type="range" id="pitch" name="pitch" min="0" max="200" value="100" style="width: 400px; margin: 0px 15px;">
+                    <span><strong style="color: white">High</strong></span>
+                </div>
+                <!--div class="setValues">
+                    <span><strong style="color: white">Easy</strong></span>
+                    <input type="range" id="level" name="level" min="10" max="50" value="20" step="10" style="width: 400px; margin: 0px 15px;">
+                    <span><strong style="color: white">Hard</strong></span>
+                </div-->
+
+            </div>
         </div>
-        <div>
-            <button id="play_sound">라이브러리 테스트</button>
+        <div id="card">
+            <div id="play_sound">듣기</div>
+            <textarea type="text" id="answer"></textarea>
+            <div id="right_answer"></div>
+            <div id="submit">제출</div> 
         </div>
     </body>
+    <script>
+function speechJapaneseSentence(text, option_prop){
+    console.log('speech success: '+text);
+    window.speechSynthesis.cancel();
+
+    const prop=option_prop || {};
+
+    const speechMessage=new SpeechSynthesisUtterance();
+    speechMessage.rate=prop.rate || 1; //0.1~10
+    speechMessage.pitch=prop.pitch || 1; //0~2
+    speechMessage.lang=prop.lang || 'en-US';
+    speechMessage.text=text;
+
+    window.speechSynthesis.speak(speechMessage);
+}
+
+
+document.getElementById('play_sound').addEventListener('click',
+    (e)=>{speechJapaneseSentence(
+        getSentence_Question(), 
+        {
+            rate: (document.getElementById("speed").value)/100, 
+            pitch: (document.getElementById("pitch").value)/100, 
+            lang:'ja-JP'
+        }
+    )});
+    </script>
 </html>
